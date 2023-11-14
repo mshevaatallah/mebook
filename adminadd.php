@@ -93,7 +93,7 @@
         </div>
       </div>
       <div class="main-content">
-        <form method="post" action="./controller/add.php">
+        <form method="post" action="./controller/add.php" enctype="multipart/form-data">
 
         <div class="input-container">
             <input type="text" name="title" id="title" placeholder="Title" />

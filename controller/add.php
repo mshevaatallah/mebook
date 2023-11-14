@@ -28,42 +28,50 @@
 
 	header("location:../admin.php");
 
-function upload()
-{
-    $namaFile = $_FILES['image']['name'];
-    $ukuranFile = $_FILES['image']['size'];
-    $error = $_FILES['image']['error'];
-    $tmpName = $_FILES['image']['tmp_name'];
 
-    // Check if no file is selected
-    if ($error === 4) {
-        echo "<script>alert('Pilih gambar terlebih dahulu!')</script>";
-        return false;
-    }
+function upload() {
 
-    // Valid image extensions
-    $ekstensiGambarValid = ['jpg', 'jpeg', 'png'];
-    $ekstensiGambar = pathinfo($namaFile, PATHINFO_EXTENSION);
+	$namaFile = $_FILES['image']['name'];
+	$ukuranFile = $_FILES['image']['size'];
+	$error = $_FILES['image']['error'];
+	$tmpName = $_FILES['image']['tmp_name'];
 
-    // Check if the uploaded file is an image
-    if (!in_array($ekstensiGambar, $ekstensiGambarValid)) {
-        echo "<script>alert('File yang Anda upload bukan gambar!')</script>";
-        return false;
-    }
+	// cek apakah tidak ada gambar yang diupload
+	if( $error === 4 ) {
+		echo "<script>
+				alert('pilih gambar terlebih dahulu!');
+			  </script>";
+		return false;
+	}
 
-    // Check file size (1 MB)
-    if ($ukuranFile > 1000000) {
-        echo "<script>alert('Ukuran gambar terlalu besar!')</script>";
-        return false;
-    }
+	// cek apakah yang diupload adalah gambar
+	$ekstensiGambarValid = ['jpg', 'jpeg', 'png'];
+	$ekstensiGambar = explode('.', $namaFile);
+	$ekstensiGambar = strtolower(end($ekstensiGambar));
+	if( !in_array($ekstensiGambar, $ekstensiGambarValid) ) {
+		echo "<script>
+				alert('yang anda upload bukan gambar!');
+			  </script>";
+		return false;
+	}
 
-    // Generate a unique filename to avoid overwriting existing files
-    $namaFileBaru = uniqid() . '.' . $ekstensiGambar;
+	// cek jika ukurannya terlalu besar
+	if( $ukuranFile > 1000000 ) {
+		echo "<script>
+				alert('ukuran gambar terlalu besar!');
+			  </script>";
+		return false;
+	}
 
-    // Move the uploaded file to the destination directory
-    move_uploaded_file($tmpName, '../img/' . $namaFileBaru);
+	// lolos pengecekan, gambar siap diupload
+	// generate nama gambar baru
+	$namaFileBaru = uniqid();
+	$namaFileBaru .= '.';
+	$namaFileBaru .= $ekstensiGambar;
 
-    return $namaFileBaru;
+	move_uploaded_file($tmpName, '../img/' . $namaFileBaru);
+
+	return $namaFileBaru;
 }
 
 ?>
