@@ -13,8 +13,12 @@ if (isset ($_POST['submit'])) {
     $category = $_POST['category'];
     $description = $_POST['description'];
     $status = $_POST['status'];
-    $image = $_POST['image'];
-
+    
+  if( $_FILES['image']['error'] === 4 ) {
+		$image = $image;
+	} else {
+		$image = upload();
+	}
     $sql = "UPDATE books_data SET title='$title', author='$author', rating='$rating', pages='$pages', genre='$genre', category='$category', description='$description', image='$image', status='$status' WHERE id=$id";
     $result = mysqli_query($conn, $sql);
     if ($result) {
@@ -31,6 +35,51 @@ if (isset ($_POST['submit'])) {
 
 
 
+
+function upload() {
+
+	$namaFile = $_FILES['image']['name'];
+	$ukuranFile = $_FILES['image']['size'];
+	$error = $_FILES['image']['error'];
+	$tmpName = $_FILES['image']['tmp_name'];
+
+	// cek apakah tidak ada gambar yang diupload
+	if( $error === 4 ) {
+		echo "<script>
+				alert('pilih gambar terlebih dahulu!');
+			  </script>";
+		return false;
+	}
+
+	// cek apakah yang diupload adalah gambar
+	$ekstensiGambarValid = ['jpg', 'jpeg', 'png'];
+	$ekstensiGambar = explode('.', $namaFile);
+	$ekstensiGambar = strtolower(end($ekstensiGambar));
+	if( !in_array($ekstensiGambar, $ekstensiGambarValid) ) {
+		echo "<script>
+				alert('yang anda upload bukan gambar!');
+			  </script>";
+		return false;
+	}
+
+	// cek jika ukurannya terlalu besar
+	if( $ukuranFile > 1000000 ) {
+		echo "<script>
+				alert('ukuran gambar terlalu besar!');
+			  </script>";
+		return false;
+	}
+
+	// lolos pengecekan, gambar siap diupload
+	// generate nama gambar baru
+	$namaFileBaru = uniqid();
+	$namaFileBaru .= '.';
+	$namaFileBaru .= $ekstensiGambar;
+
+	move_uploaded_file($tmpName, '../img/' . $namaFileBaru);
+
+	return $namaFileBaru;
+}
 
 
 ?>

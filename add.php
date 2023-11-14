@@ -19,14 +19,14 @@
 						$result = mysqli_query($conn, $sql);
 			if ($result) {
 					echo "<script>alert('Selamat, input buku berhasil!')</script>";
-					header("Location: ../admin.php");
+					header("Location: ./admin.php");
 				
 				} else {
 					echo "<script>alert('Woops! Terjadi kesalahan.')</script>";
 				}
 		
 
-	header("location:../admin.php");
+	header("location:./admin.php");
 
 
 function upload() {
@@ -69,7 +69,11 @@ function upload() {
 	$namaFileBaru .= '.';
 	$namaFileBaru .= $ekstensiGambar;
 
-	move_uploaded_file($tmpName, '../img/' . $namaFileBaru);
+	if (move_uploaded_file($tmpName, 'img/' . $namaFileBaru)) {
+    echo 'File berhasil diupload!';
+} else {
+    echo 'Gagal mengupload file. Error: ' . $_FILES['image']['error'];
+}
 
 	return $namaFileBaru;
 }
