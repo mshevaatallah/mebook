@@ -119,7 +119,7 @@ include './config/koneksi.php';
     <?php while($row = mysqli_fetch_assoc($result)) : ?>
             <div class="book-card-item">
               <div class="book-info">
-                <div class="book-frame"></div>
+                <div class="book-frame"> <img src="img/<?= $row["image"] ?>" alt=""></div>
                 <div class="book-detail">
                   <div class="title-book"><?= $row["title"] ?></div>
                   <div class="genre-book"><?= $row["genre"] ?></div>
