@@ -68,12 +68,15 @@ function upload() {
 	$namaFileBaru = uniqid();
 	$namaFileBaru .= '.';
 	$namaFileBaru .= $ekstensiGambar;
+	//buatkanlah fungsi untuk memindahkan image yang sudah di upload ke folder img 
+	move_uploaded_file($tmpName, '/img' . $namaFileBaru);
 
-	if (move_uploaded_file($tmpName, 'img/' . $namaFileBaru)) {
-    echo 'File berhasil diupload!';
-} else {
-    echo 'Gagal mengupload file. Error: ' . $_FILES['image']['error'];
-}
+
+// 	if (move_uploaded_file($tmpName, 'img/' . $namaFileBaru)) {
+//     echo 'File berhasil diupload!';
+// } else {
+//     echo 'Gagal mengupload file. Error: ' . $_FILES['image']['error'];
+// }
 
 	return $namaFileBaru;
 }
